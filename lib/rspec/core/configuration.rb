@@ -362,7 +362,14 @@ module RSpec
 
       # Returns the configured mock framework adapter module
       def mock_framework
-        mock_with :rspec unless @mock_framework
+        if @mock_framework.nil?
+          begin
+            require 'rspec/mocks'
+            mock_with :rspec
+          rescue LoadError
+            mock_with :nothing
+          end
+        end
         @mock_framework
       end
 
@@ -480,7 +487,14 @@ module RSpec
 
       # Returns the configured expectation framework adapter module(s)
       def expectation_frameworks
-        expect_with :rspec if @expectation_frameworks.empty?
+        if @expectation_frameworks.empty?
+          begin
+            require 'rspec/expectations'
+            expect_with :rspec
+          rescue LoadError
+            expect_with Module.new
+          end
+        end
         @expectation_frameworks
       end
 

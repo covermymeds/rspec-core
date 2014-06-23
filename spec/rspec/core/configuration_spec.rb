@@ -259,7 +259,7 @@ module RSpec::Core
 
     describe "#expectation_framework" do
       it "defaults to :rspec" do
-        expect(config).to receive(:require).with('rspec/expectations')
+        expect(config).to receive(:require).with('rspec/expectations').at_least(:once)
         config.expectation_frameworks
       end
     end
